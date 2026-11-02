@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alma Enterprise Merchant Simulator | Value Engineering PoC</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            alma: {
+              bg: '#0B0F19',
+              card: '#111827',
+              border: '#1F2937',
+              accent: '#6366F1', // Electric Purple / Indigo
+              accentHover: '#4F46E5',
+              mint: '#10B981',   // Financial metric green
+              coral: '#F43F5E',
+              amber: '#F59E0B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0B0F19;
+      color: #F3F4F6;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #111827;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+    .glow-indigo {
+      box-shadow: 0 0 25px -4px rgba(99, 102, 241, 0.3);
+    }
+    .glow-mint {
+      box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-alma-accent selection:text-white custom-scrollbar">
+
+  <!-- EXECUTIVE HEADER -->
+  <header class="border-b border-alma-border bg-alma-bg/95 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-alma-accent via-indigo-500 to-purple-600 flex items-center justify-center font-extrabold text-white text-xl shadow-lg glow-indigo">
+          a.
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">Alma Enterprise Merchant Simulator</h1>
+            <span class="text-xs bg-alma-accent/20 text-indigo-300 font-mono font-medium px-2.5 py-0.5 rounded-full border border-alma-accent/40">Value Engineering PoC</span>
+          </div>
+          <p class="text-xs text-slate-400">
+            Interactive Merchant Conversion & AOV Uplift Model | Senior Enterprise AE Sales Briefing
+          </p>
+        </div>
+      </div>
+
+      <!-- CANDIDATE FOOTPRINT BADGE -->
+      <div class="flex items-center gap-3 text-xs bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800">
+        <div class="text-slate-400">Candidate: <strong class="text-white font-medium">Enrique García</strong></div>
+        <span class="text-slate-700">|</span>
+        <div class="text-alma-mint font-mono font-medium flex items-center gap-1.5">
+          <span class="h-2 w-2 rounded-full bg-alma-mint animate-pulse"></span>
+          Senior Enterprise AE Pitch Asset
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SIMULATOR CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- EXECUTIVE C-LEVEL FINANCIAL IMPACT CALLOUT -->
+    <div class="bg-gradient-to-r from-alma-card via-slate-900 to-alma-card p-6 rounded-2xl border border-alma-border shadow-xl space-y-3 relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-96 h-96 bg-alma-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-xs font-mono text-alma-accent bg-alma-accent/10 px-3 py-1 rounded-full border border-alma-accent/20">
+          <span>⚡ C-Level Executive Pitch Briefing</span>
+        </div>
+        <button onclick="copyExecutiveSummary()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg border border-slate-700 font-medium transition-all flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-alma-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+          <span id="copy-btn-text">Copy Pitch Text</span>
+        </button>
+      </div>
+      
+      <h2 id="summary-headline" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">
+        Integrating Alma generates an estimated <span class="text-alma-mint font-mono">€4,435,200</span> in Net New Annual GMV (+6.2% Revenue Growth).
+      </h2>
+      <p id="summary-subtext" class="text-xs sm:text-sm text-slate-300 max-w-5xl leading-relaxed">
+        By offering 3x/4x flexible payment installments at checkout, this merchant captures higher basket sizes (+35.0% BNPL AOV uplift) across 63,360 annual orders without credit risk or balance sheet exposure.
+      </p>
+    </div>
+
+    <!-- MAIN INTERACTIVE WORKSPACE (2 COLUMNS) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- LEFT COLUMN: INPUT CONTROLS & CHECKOUT PREVIEW (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- PARAMETERS CONTROL CARD -->
+        <div class="bg-alma-card p-5 rounded-xl border border-alma-border space-y-5 shadow-lg">
+          <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-alma-accent"></span>
+              Merchant Baseline Parameters
+            </h3>
+            <button onclick="resetDefaults()" class="text-[11px] text-slate-400 hover:text-slate-200 underline">Reset Defaults</button>
+          </div>
+
+          <!-- INPUT 1: MONTHLY VISITORS -->
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs">
+              <label class="text-slate-300 font-medium">Monthly E-Commerce Visitors</label>
+              <span id="val-visitors" class="font-mono text-alma-accent font-bold">1,500,000</span>
+            </div>
+            <input type="range" id="input-visitors" min="100000" max="10000000" step="100000" value="1500000" class="w-full accent-alma-accent cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+              <span>100K</span>
+              <span>5M</span>
+              <span>10M</span>
+            </div>
+          </div>
+
+          <!-- INPUT 2: CHECKOUT CONVERSION RATE % -->
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs">
+              <label class="text-slate-300 font-medium">Baseline Conversion Rate (%)</label>
+              <span id="val-conversion" class="font-mono text-alma-accent font-bold">2.20%</span>
+            </div>
+            <input type="range" id="input-conversion" min="0.5" max="5.0" step="0.1" value="2.2" class="w-full accent-alma-accent cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+              <span>0.5%</span>
+              <span>2.5%</span>
+              <span>5.0%</span>
+            </div>
+          </div>
+
+          <!-- INPUT 3: AVERAGE ORDER VALUE -->
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs">
+              <label class="text-slate-300 font-medium">Average Order Value (AOV €)</label>
+              <span id="val-aov" class="font-mono text-alma-accent font-bold">180 €</span>
+            </div>
+            <input type="range" id="input-aov" min="30" max="600" step="10" value="180" class="w-full accent-alma-accent cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+              <span>30 €</span>
+              <span>300 €</span>
+              <span>600 €</span>
+            </div>
+          </div>
+
+          <!-- DIVIDER FOR ALMA PROJECTION ASSUMPTIONS -->
+          <div class="pt-3 border-t border-slate-800 space-y-4">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+              Alma Impact Assumptions
+            </h4>
+
+            <!-- INPUT 4: ALMA ADOPTION RATE -->
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs">
+                <label class="text-slate-300 font-medium">Alma BNPL Share of Checkout (%)</label>
+                <span id="val-adoption" class="font-mono text-purple-400 font-bold">16.0%</span>
+              </div>
+              <input type="range" id="input-adoption" min="5" max="40" step="1" value="16" class="w-full accent-purple-500 cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                <span>5%</span>
+                <span>20%</span>
+                <span>40%</span>
+              </div>
+            </div>
+
+            <!-- INPUT 5: AOV LIFT % -->
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs">
+                <label class="text-slate-300 font-medium">Projected AOV Uplift on Alma Orders (%)</label>
+                <span id="val-aov-lift" class="font-mono text-purple-400 font-bold">+35.0%</span>
+              </div>
+              <input type="range" id="input-aov-lift" min="10" max="80" step="1" value="35" class="w-full accent-purple-500 cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                <span>+10%</span>
+                <span>+35%</span>
+                <span>+80%</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- DYNAMIC LIVE CHECKOUT WIDGET PREVIEW -->
+        <div class="bg-alma-card p-5 rounded-xl border border-alma-border space-y-4 shadow-lg">
+          <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <svg class="w-4 h-4 text-alma-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              Dynamic Live Checkout Widget Preview
+            </h3>
+            <span class="text-[10px] font-mono text-alma-mint bg-alma-mint/10 px-2 py-0.5 rounded border border-alma-mint/30">Alma SDK Active</span>
+          </div>
+
+          <!-- MOCK MERCHANT CHECKOUT INTERFACE -->
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+              <span class="text-xs text-slate-400">Total Basket (with Alma Uplift):</span>
+              <span id="widget-basket" class="text-sm font-bold font-mono text-white">243.00 €</span>
+            </div>
+
+            <!-- ALMA PAYMENT WIDGET CARD -->
+            <div class="space-y-2">
+              <div class="p-3 bg-slate-900 rounded-lg border border-alma-accent flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                  <div class="h-7 w-7 rounded-lg bg-alma-accent text-white font-extrabold text-sm flex items-center justify-center shadow">a.</div>
+                  <div>
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                      Pagar en 3x sin intereses con Alma
+                      <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-normal px-1.5 py-0.2 rounded border border-emerald-500/30">Sin comisiones</span>
+                    </div>
+                    <div id="widget-3x-desc" class="text-[11px] text-slate-300 font-mono mt-0.5">3 cuotas de 81.00 € / mes</div>
+                  </div>
+                </div>
+                <div class="text-[10px] font-mono text-alma-mint font-semibold bg-slate-950 px-2 py-1 rounded border border-slate-800">TIN 0%</div>
+              </div>
+
+              <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-800 flex items-center justify-between opacity-80">
+                <div class="flex items-center gap-3">
+                  <div class="h-7 w-7 rounded-lg bg-slate-800 text-slate-300 font-extrabold text-sm flex items-center justify-center">a.</div>
+                  <div>
+                    <div class="text-xs font-semibold text-slate-300">Pagar en 4x con Alma</div>
+                    <div id="widget-4x-desc" class="text-[11px] text-slate-400 font-mono mt-0.5">4 cuotas de 60.75 € / mes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[10px] text-slate-500 text-center pt-1 font-mono">
+              Instant credit decisioning in &lt;120ms • No merchant fraud risk
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: FINANCIAL KPIS & DYNAMIC CHARTS (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- FINANCIAL KPI SUMMARY CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+          <div class="bg-alma-card p-4 rounded-xl border border-alma-border shadow-sm">
+            <div class="text-[11px] text-slate-400 font-medium">Baseline Annual GMV</div>
+            <div id="metric-base-gmv" class="text-lg sm:text-xl font-mono font-extrabold text-slate-200 mt-1">71.280.000 €</div>
+            <div class="text-[10px] text-slate-500 mt-1">Without Alma payment options</div>
+          </div>
+
+          <div class="bg-alma-card p-4 rounded-xl border border-alma-border shadow-sm">
+            <div class="text-[11px] text-slate-400 font-medium">Projected Annual GMV</div>
+            <div id="metric-proj-gmv" class="text-lg sm:text-xl font-mono font-extrabold text-white mt-1">75.715.200 €</div>
+            <div class="text-[10px] text-alma-mint font-medium mt-1">With Alma BNPL integration</div>
+          </div>
+
+          <div class="bg-alma-card p-4 rounded-xl border border-alma-border shadow-sm col-span-2 sm:col-span-1">
+            <div class="text-[11px] text-slate-400 font-medium">Net Incremental GMV Lift</div>
+            <div id="metric-net-lift" class="text-lg sm:text-xl font-mono font-extrabold text-alma-mint mt-1">+4.435.200 €</div>
+            <div id="metric-lift-pct" class="text-[10px] text-alma-mint font-medium mt-1">+6.22% overall growth</div>
+          </div>
+        </div>
+
+        <!-- CHART 1: BASELINE VS PROJECTED GMV BAR CHART -->
+        <div class="bg-alma-card p-5 rounded-xl border border-alma-border space-y-4 shadow-lg">
+          <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono">
+              1. Annual GMV Comparison (Baseline vs. Alma Integrated)
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">Total Volume Impact</span>
+          </div>
+          <div class="h-60">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+
+        <!-- CHART 2: 12-MONTH PIPELINE WITH S-CURVE & Q4 RETAIL SEASONALITY -->
+        <div class="bg-alma-card p-5 rounded-xl border border-alma-border space-y-4 shadow-lg">
+          <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                2. 12-Month Projected Growth Curve & Seasonality
+              </h3>
+              <p class="text-[10px] text-slate-400">Incorporates S-Curve Ramp-up (M1-M8) + Q4 Retail Black Friday Boost (M10-M12)</p>
+            </div>
+            <span class="text-[11px] font-mono text-alma-mint font-semibold">Enterprise Realistic Model</span>
+          </div>
+          <div class="h-64">
+            <canvas id="pipelineChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TECHNICAL INFRASTRUCTURE & CTO SLA BENCHMARKS -->
+    <div class="bg-alma-card p-5 rounded-xl border border-alma-border space-y-4 shadow-lg">
+      <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+        <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          CTO & Engineering Technical Trust Benchmarks
+        </h3>
+        <span class="text-[11px] font-mono text-emerald-400">Alma Enterprise Infrastructure Specs</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+          <div class="text-[10px] text-slate-400 font-mono uppercase">API Latency SLA</div>
+          <div class="text-base font-bold font-mono text-alma-accent mt-1">&lt; 120 ms</div>
+          <div class="text-[9px] text-slate-500 mt-0.5">Sub-second risk scoring</div>
+        </div>
+
+        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+          <div class="text-[10px] text-slate-400 font-mono uppercase">Platform Uptime</div>
+          <div class="text-base font-bold font-mono text-emerald-400 mt-1">99.99%</div>
+          <div class="text-[9px] text-slate-500 mt-0.5">High-Availability Cloud</div>
+        </div>
+
+        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+          <div class="text-[10px] text-slate-400 font-mono uppercase">Merchant Payout</div>
+          <div class="text-base font-bold font-mono text-white mt-1">D + 1</div>
+          <div class="text-[9px] text-slate-500 mt-0.5">100% Guaranteed Cashflow</div>
+        </div>
+
+        <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
+          <div class="text-[10px] text-slate-400 font-mono uppercase">Compliance & Fraud</div>
+          <div class="text-base font-bold font-mono text-purple-400 mt-1">PSD2 / SCA</div>
+          <div class="text-[9px] text-slate-500 mt-0.5">Automated 3DS2 Engine</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-alma-border bg-alma-bg py-4 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div>
+        Designed for <span class="text-slate-300 font-semibold">Alma Senior Enterprise AE Candidate Demonstrations</span>
+      </div>
+      <div class="font-mono text-[11px] text-slate-400">
+        Google AE Background | MEDDPICC Value Selling & Technical GTM
+      </div>
+    </div>
+  </footer>
+
+  <!-- CALCULATOR & REALISTIC CHART JS ENGINE -->
+  <script>
+    let revenueChartInstance = null;
+    let pipelineChartInstance = null;
+
+    function formatEUR(val) {
+      return Math.round(val).toLocaleString('es-ES') + ' €';
+    }
+
+    function calculateImpact() {
+      // Input Values
+      const visitors = parseFloat(document.getElementById('input-visitors').value);
+      const convRate = parseFloat(document.getElementById('input-conversion').value) / 100;
+      const baseAOV = parseFloat(document.getElementById('input-aov').value);
+      const bnplAdoption = parseFloat(document.getElementById('input-adoption').value) / 100;
+      const aovLiftPct = parseFloat(document.getElementById('input-aov-lift').value) / 100;
+
+      // Update Slider Display Labels
+      document.getElementById('val-visitors').innerText = visitors.toLocaleString('es-ES');
+      document.getElementById('val-conversion').innerText = (convRate * 100).toFixed(2) + '%';
+      document.getElementById('val-aov').innerText = baseAOV + ' €';
+      document.getElementById('val-adoption').innerText = (bnplAdoption * 100).toFixed(1) + '%';
+      document.getElementById('val-aov-lift').innerText = '+' + (aovLiftPct * 100).toFixed(1) + '%';
+
+      // Computations
+      const monthlyOrders = visitors * convRate;
+      const annualOrders = monthlyOrders * 12;
+      const baseAnnualGMV = annualOrders * baseAOV;
+
+      const bnplOrdersAnnual = annualOrders * bnplAdoption;
+      const standardOrdersAnnual = annualOrders * (1 - bnplAdoption);
+
+      const bnplAOV = baseAOV * (1 + aovLiftPct);
+
+      const projectedAnnualGMV = (standardOrdersAnnual * baseAOV) + (bnplOrdersAnnual * bnplAOV);
+      const netAnnualLift = projectedAnnualGMV - baseAnnualGMV;
+      const liftPercentage = (netAnnualLift / baseAnnualGMV) * 100;
+
+      // Update Metric Cards
+      document.getElementById('metric-base-gmv').innerText = formatEUR(baseAnnualGMV);
+      document.getElementById('metric-proj-gmv').innerText = formatEUR(projectedAnnualGMV);
+      document.getElementById('metric-net-lift').innerText = '+' + formatEUR(netAnnualLift);
+      document.getElementById('metric-lift-pct').innerText = '+' + liftPercentage.toFixed(2) + '% overall growth';
+
+      // Update Briefing Text
+      document.getElementById('summary-headline').innerHTML = 
+        `Integrating Alma generates an estimated <span class="text-alma-mint font-mono">${formatEUR(netAnnualLift)}</span> in Net New Annual GMV (+${liftPercentage.toFixed(1)}% Revenue Growth).`;
+      
+      document.getElementById('summary-subtext').innerText = 
+        `By offering 3x/4x flexible payment installments at checkout, this merchant captures higher basket sizes (+${(aovLiftPct*100).toFixed(1)}% BNPL AOV uplift) across ${Math.round(bnplOrdersAnnual).toLocaleString('es-ES')} annual orders without credit risk or balance sheet exposure.`;
+
+      // Update Live Widget Preview
+      document.getElementById('widget-basket').innerText = bnplAOV.toFixed(2) + ' €';
+      document.getElementById('widget-3x-desc').innerText = `3 cuotas de ${(bnplAOV / 3).toFixed(2)} € / mes`;
+      document.getElementById('widget-4x-desc').innerText = `4 cuotas de ${(bnplAOV / 4).toFixed(2)} € / mes`;
+
+      // Update Dynamic Charts
+      updateCharts(baseAnnualGMV, projectedAnnualGMV, netAnnualLift);
+    }
+
+    function initCharts() {
+      // Chart 1: Bar Chart
+      const ctxRev = document.getElementById('revenueChart').getContext('2d');
+      revenueChartInstance = new Chart(ctxRev, {
+        type: 'bar',
+        data: {
+          labels: ['Baseline GMV (Current)', 'Projected GMV (With Alma)'],
+          datasets: [{
+            data: [0, 0],
+            backgroundColor: ['#1F2937', '#6366F1'],
+            borderColor: ['#374151', '#818CF8'],
+            borderWidth: 1.5,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ' GMV: ' + formatEUR(ctx.raw)
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: '#1F2937' },
+              ticks: { color: '#9CA3AF', font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#F3F4F6', font: { weight: 'bold' } }
+            }
+          }
+        }
+      });
+
+      // Chart 2: Real-world S-Curve & Q4 Retail Seasonality Line Chart
+      const ctxPipe = document.getElementById('pipelineChart').getContext('2d');
+      pipelineChartInstance = new Chart(ctxPipe, {
+        type: 'line',
+        data: {
+          labels: ['M1 (Launch)', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10 (Q4 Prep)', 'M11 (Black Fri)', 'M12 (Xmas)'],
+          datasets: [
+            {
+              label: 'Monthly Net Lift (€)',
+              data: [],
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: '#10B981',
+              pointRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ' Monthly Net Revenue Lift: ' + formatEUR(ctx.raw)
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: '#1F2937' },
+              ticks: { color: '#9CA3AF', font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#9CA3AF', font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function updateCharts(baseGMV, projGMV, netLift) {
+      if (!revenueChartInstance || !pipelineChartInstance) return;
+
+      // Bar Chart Update
+      revenueChartInstance.data.datasets[0].data = [baseGMV, projGMV];
+      revenueChartInstance.update();
+
+      // Line Chart Update: S-Curve Ramp-up + Q4 Retail Seasonality Multipliers
+      // Month 1 to 12 ramp weights summing to roughly 12 for annual distribution
+      // S-curve ramp: slow start M1-M2, acceleration M3-M6, maturity M7-M9, Q4 peak M10-M12
+      const rampMultipliers = [
+        0.25, // M1: Integration & soft rollout
+        0.40, // M2: Early adoption
+        0.65, // M3: Ramp-up acceleration
+        0.85, // M4: Widget optimization
+        1.00, // M5: Full adoption baseline
+        1.05, // M6: Stable performance
+        1.05, // M7: Summer baseline
+        1.00, // M8: August slowdown
+        1.10, // M9: Back to school
+        1.30, // M10: Pre-Q4 buildup
+        1.85, // M11: Black Friday & Cyber Week Peak (+85%)
+        1.50  // M12: Christmas Shopping Peak (+50%)
+      ];
+
+      const averageMonthlyLift = netLift / 12;
+      const monthlyData = rampMultipliers.map(mult => averageMonthlyLift * mult);
+
+      pipelineChartInstance.data.datasets[0].data = monthlyData;
+      pipelineChartInstance.update();
+    }
+
+    function resetDefaults() {
+      document.getElementById('input-visitors').value = 1500000;
+      document.getElementById('input-conversion').value = 2.2;
+      document.getElementById('input-aov').value = 180;
+      document.getElementById('input-adoption').value = 16;
+      document.getElementById('input-aov-lift').value = 35;
+      calculateImpact();
+    }
+
+    function copyExecutiveSummary() {
+      const headline = document.getElementById('summary-headline').innerText;
+      const subtext = document.getElementById('summary-subtext').innerText;
+      const textToCopy = `${headline}\n\n${subtext}\n\n[Modeled via Alma Value Engineering PoC by Enrique García]`;
+
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = textToCopy;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+
+      const btnText = document.getElementById('copy-btn-text');
+      btnText.innerText = 'Copied!';
+      setTimeout(() => {
+        btnText.innerText = 'Copy Pitch Text';
+      }, 2000);
+    }
+
+    window.onload = function() {
+      initCharts();
+      
+      const inputs = ['input-visitors', 'input-conversion', 'input-aov', 'input-adoption', 'input-aov-lift'];
+      inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', calculateImpact);
+      });
+
+      calculateImpact();
+    };
+  </script>
+
+</body>
+</html>
